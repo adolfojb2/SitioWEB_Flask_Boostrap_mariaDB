@@ -56,9 +56,24 @@ def index():
     return render_template('index.html', usuarios=usuarios)
 
 
-@app.route('/productos')
-def productos():
-    return render_template('productos.html')
+@app.route('/crud_productos',methods=['POST','GET'])
+def crud_productos():
+    if request.method=='POST':
+        producto = request.form['producto']
+        descripcion = request.form['descripcion']
+        categoria = request.form['categoria']
+        stock = request.form['stock']
+        precio = request.form['precio']
+        # Ingresar los datos a la DB
+        cur = web_brushDB.get_db().cursor()
+        cur.execute('INSERT INTO productos(producto,descripcion,categoria,stock,precio)VALUES(%s,%s,%s,%s,%s);',(producto,descripcion,categoria,stock,precio))
+        web_brushDB.get_db().commit() #se confirman los datos ingresados
+
+    # Se optienen los datos de la DB
+    cur = web_brushDB.get_db().cursor()
+    cur.execute('SELECT * FROM productos') 
+    productos = cur.fetchall()
+    return render_template('crud_productos.html',productos=productos)
 
 @app.route('/contacto')
 def contacto():

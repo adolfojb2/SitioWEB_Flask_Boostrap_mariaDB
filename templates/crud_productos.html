@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-md-4 pt-4 pb-4 ml-auto mr-auto">
       <h1>Agregar producto</h1>
-      <form action="/registro" method="post">
+      <form action="/crud_productos" method="post">
           <div class="form-group">
             <label for="exampleInputPassword1">Producto</label>
             <input type="text" class="form-control" name="producto" placeholder="Producto" required>
@@ -18,11 +18,11 @@
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Categoria</label>
-            <select name="ocupacion" id="">
-              <option value="Estudiante">Paletas</option>
-              <option value="Profesor">Labiales</option>
-              <option value="Directivo">Cuidado de la piel</option>
-              <option value="Rector">Dispositivos</option>
+            <select name="categoria">
+              <option >Paletas</option>
+              <option >Labiales</option>
+              <option >Cuidado de la piel</option>
+              <option >Dispositivos</option>
             </select>
           </div>
           <div class="form-group">
@@ -42,6 +42,34 @@
         </form>
     </div>
   </div>
+    <div class="table-responsive">
+      <table class="table table-dark table-striped">
+        <thead>
+          <tr>
+            <th scope="col">codigo</th>
+            <th scope="col">producto</th>
+            <th scope="col">descripción</th>
+            <th scope="col">categoria</th>
+            <th scope="col">stock</th>
+            <th scope="col">precio</th>
+            <th scope="col">fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for dato in productos %}
+                <tr>
+                    <td>{{ dato.0 }}</td>
+                    <td>{{ dato.1 }}</td>
+                    <td>{{ dato.2 }}</td>
+                    <td>{{ dato.3 }}</td>
+                    <td>{{ dato.4 }}</td>
+                    <td>{{ dato.5 }}</td>
+                    <td>{{ dato.7 }}</td>
+                </tr>
+            {% endfor %}    
+        </tbody>
+      </table>
+    </div>
 </div>
 
 {% endblock %}
