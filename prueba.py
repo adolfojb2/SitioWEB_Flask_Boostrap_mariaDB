@@ -83,6 +83,10 @@ def contacto():
 def add_products():
     return render_template('add_products.html')    
 
+@app.route('/edit_products')
+def edit_products():
+    return render_template('edit_products.html')       
+
 if __name__ == '__main__':
     app.run(debug=True)
 
