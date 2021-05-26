@@ -79,6 +79,10 @@ def crud_productos():
 def contacto():
     return render_template('contacto.html')
 
+@app.route('/add_products')
+def add_products():
+    return render_template('add_products.html')    
+
 if __name__ == '__main__':
     app.run(debug=True)
 

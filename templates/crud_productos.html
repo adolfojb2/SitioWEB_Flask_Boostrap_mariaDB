@@ -1,49 +1,8 @@
 {% extends 'layout.html' %}
 {% block body %}
-
-<div class="contenido pb-4 pt-4"> 
-  <div class="row">
-    <div class="col-md-4 pt-4 pb-4 ml-auto mr-auto">
-      <h1>Agregar producto</h1>
-      <form action="/crud_productos" method="post">
-          <div class="form-group">
-            <label for="exampleInputPassword1">Producto</label>
-            <input type="text" class="form-control" name="producto" placeholder="Producto" required>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Descripción</label>
-            <div>
-              <textarea name="descripcion" cols="50" rows="4" placeholder="Descripción del producto"></textarea>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Categoria</label>
-            <select name="categoria">
-              <option >Paletas</option>
-              <option >Labiales</option>
-              <option >Cuidado de la piel</option>
-              <option >Dispositivos</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Stock</label>
-            <input type="text" class="form-control" name="stock" placeholder="Stock" required>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Precio</label>
-            <input type="text" class="form-control" name="precio" placeholder="Precio" required>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Foto</label>
-            <input type="file" name="foto" accept=".png,.jpg" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Guardar</button>
-          
-        </form>
-    </div>
-  </div>
+    <a type="button" class="btn btn-success mb-3" href="/add_products" >Agregar producto</a>
     <div class="table-responsive">
-      <table class="table table-dark table-striped">
+      <table class="table table-dark table-striped table-bordered">
         <thead>
           <tr>
             <th scope="col">codigo</th>
@@ -65,6 +24,8 @@
                     <td>{{ dato.4 }}</td>
                     <td>{{ dato.5 }}</td>
                     <td>{{ dato.7 }}</td>
+                    <td><a type="button" class="btn btn-danger" href="">Editar</a></a></td>
+                    <td><a type="button" class="btn btn-primary" href="">Eliminar</a></td>
                 </tr>
             {% endfor %}    
         </tbody>
