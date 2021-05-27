@@ -3,13 +3,16 @@ from flaskext.mysql import MySQL
 from decouple import config
 
 app = Flask(__name__)
-
+# mariaDB connection 
 web_brushDB = MySQL()
 app.config['MYSQL_DATABASE_HOST'] = config('HOST_DB')
 app.config['MYSQL_DATABASE_USER'] = config('USER_DB')
 app.config['MYSQL_DATABASE_PASSWORD'] = config('PASSWORD_DB')
 app.config['MYSQL_DATABASE_DB'] = config('DATABASE')
 web_brushDB.init_app(app)
+
+#sesion
+app.secret_key='mysecretkey'
 
 @app.route('/login',methods=['POST','GET'])
 def login():
@@ -56,19 +59,8 @@ def index():
     return render_template('index.html', usuarios=usuarios)
 
 
-@app.route('/crud_productos',methods=['POST','GET'])
+@app.route('/crud_productos')
 def crud_productos():
-    if request.method=='POST':
-        producto = request.form['producto']
-        descripcion = request.form['descripcion']
-        categoria = request.form['categoria']
-        stock = request.form['stock']
-        precio = request.form['precio']
-        # Ingresar los datos a la DB
-        cur = web_brushDB.get_db().cursor()
-        cur.execute('INSERT INTO productos(producto,descripcion,categoria,stock,precio)VALUES(%s,%s,%s,%s,%s);',(producto,descripcion,categoria,stock,precio))
-        web_brushDB.get_db().commit() #se confirman los datos ingresados
-
     # Se optienen los datos de la DB
     cur = web_brushDB.get_db().cursor()
     cur.execute('SELECT * FROM productos') 
@@ -79,13 +71,53 @@ def crud_productos():
 def contacto():
     return render_template('contacto.html')
 
-@app.route('/add_products')
+@app.route('/add_products',methods=['POST','GET'])
 def add_products():
-    return render_template('add_products.html')    
+    if request.method=='POST':
+        producto = request.form['producto']
+        descripcion = request.form['descripcion']
+        categoria = request.form['categoria']
+        stock = request.form['stock']
+        precio = request.form['precio']
+        # Ingresar los datos a la DB
+        cur = web_brushDB.get_db().cursor()
+        cur.execute('INSERT INTO productos(producto,descripcion,categoria,stock,precio)VALUES(%s,%s,%s,%s,%s);',(producto,descripcion,categoria,stock,precio))
+        web_brushDB.get_db().commit() #se confirman los datos ingresados
+        flash('Producto agregado satisfactoriamente')
+        return redirect(url_for('crud_productos'))
+    else:
+        return render_template('add_products.html')        
 
-@app.route('/edit_products')
-def edit_products():
-    return render_template('edit_products.html')       
+@app.route('/edit_products/<string:id>')
+def edit_products(id):
+    cur = web_brushDB.get_db().cursor()
+    cur.execute('SELECT*FROM productos WHERE codigo=%s',(id)) #se consulta en la tabla la fila con el codigo especificado
+    data = cur.fetchall()
+    print(data[0])
+    return render_template('edit_products.html',data=data[0])
+
+@app.route('/update/<string:id>',methods=['POST'])
+def update(id):
+    if request.method=='POST':
+        producto = request.form['producto']
+        descripcion = request.form['descripcion']
+        categoria = request.form['categoria']
+        stock = request.form['stock']
+        precio = request.form['precio']
+    cur = web_brushDB.get_db().cursor()
+    cur.execute('UPDATE productos SET producto=%s,descripcion=%s,categoria=%s,stock=%s,precio=%s WHERE codigo=%s',(producto,descripcion,categoria,stock,precio,id))
+    web_brushDB.get_db().commit()
+    flash('El producto actualizado satisfactoriamente')
+    return redirect(url_for('crud_productos'))
+            
+
+@app.route('/delete_products/<string:id>')
+def delete_products(id):
+    cur = web_brushDB.get_db().cursor()
+    cur.execute('DELETE FROM productos WHERE codigo={0}'.format(id))
+    web_brushDB.get_db().commit()
+    flash('Producto eliminado satisfactoriamente')
+    return redirect(url_for('crud_productos'))
 
 if __name__ == '__main__':
     app.run(debug=True)

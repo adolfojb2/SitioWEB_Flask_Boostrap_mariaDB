@@ -1,6 +1,15 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <a type="button" class="btn btn-success mb-3" href="/add_products" >Agregar producto</a>
+<!-- Mensajes de acciones con flash -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+  {% for message in messages %}
+    <p>{{ message }}</p>
+  {% endfor %}
+{% endif %}
+{% endwith %} 
+
+    <a type="button" class="btn btn-success mb-3" href="/add_products">Agregar producto</a>
     <div class="table-responsive">
       <table class="table table-dark table-striped table-bordered">
         <thead>
@@ -24,8 +33,8 @@
                     <td>{{ dato.4 }}</td>
                     <td>{{ dato.5 }}</td>
                     <td>{{ dato.7 }}</td>
-                    <td><a type="button" class="btn btn-danger" href="/edit_products">Editar</a></a></td>
-                    <td><a type="button" class="btn btn-primary" href="">Eliminar</a></td>
+                    <td><a type="button" class="btn btn-danger" href="/edit_products/{{ dato.0 }}">Editar</a></td>
+                    <td><a type="button" class="btn btn-primary" href="/delete_products/{{ dato.0 }}">Eliminar</a></td>
                 </tr>
             {% endfor %}    
         </tbody>
